@@ -52,13 +52,12 @@ def get_stat_info(table_type:str, year:int, region:int|str, data_point:str, db_p
     finally:
         conn.close()
 
-def get_stat_average(table_type: str, years: list[int], region: int|str, data_point: str, db_path: str='data/database/stat_igre_data.db'):
+def get_stat_for_all_years(table_type: str, region: int|str, data_point: str, db_path: str='data/database/stat_igre_data.db'):
     """
-    Calculates the average of a data point over a list of years by reusing get_stat_info.
+    Returns the values of a data point over ALL available years in the database.
     
     Args:
         table_type (str): 'gospodinjstva' or 'osebe'.
-        years (list[int]): List of years to include (e.g., [2018, 2022]).
         region (str/int): Region name or code.
         data_point (str): Variable name.
         db_path (str): Path to database.
@@ -66,18 +65,41 @@ def get_stat_average(table_type: str, years: list[int], region: int|str, data_po
     Returns:
         float: The average value, or a message if no data was found.
     """
+    conn = sqlite3.connect(db_path)
+    
+    try:
+        # 1. Map table_type
+        table_mapping = {
+            'gospodinjstva': 'PODATKI_GOSPODINJSTVA',
+            'osebe': 'PODATKI_OSEBE'
+        }
+        db_table = table_mapping.get(table_type.lower())
+        
+        if not db_table:
+            return "Error: table_type must be 'gospodinjstva' or 'osebe'."
+
+        # 2. Get all available years from the table
+        # We query the distinct years present in the dataset
+        cursor = conn.execute(f"SELECT DISTINCT Leto FROM {db_table} ORDER BY Leto")
+        available_years = [row[0] for row in cursor.fetchall()]
+        
+        if not available_years:
+            return f"Error: No years found in table '{db_table}'."
+
+    finally:
+        conn.close()
+    
+    # 3. Iterate through the detected years and collect values
     values = []
     
-    for year in years:
-        # Reuse the first function
+    for year in available_years:
+        # Reuse the main extraction function
         result = get_stat_info(table_type, year, region, data_point, db_path)
         
-        # Only add to list if the result is a number (ignores error strings)
-        if isinstance(result, (int, float)):
-            values.append(result)
+        values.append(result)
             
     if not values:
-        return "No valid data found for the given years."
+        return "No valid data found for the given criteria."
     
-    # Calculate average
-    return sum(values) / len(values)
+    # 4. Calculate Average
+    return values
