@@ -1,6 +1,6 @@
 import sqlite3
 
-def get_stat_info(table_type, year, region, data_point, db_path='data/database/stat_igre_data.db'):
+def get_stat_info(table_type:str, year:int, region:int|str, data_point:str, db_path:str='data/database/stat_igre_data.db'):
     """
     Extracts a specific data value from the database.
     
