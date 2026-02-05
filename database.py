@@ -51,3 +51,33 @@ def get_stat_info(table_type:str, year:int, region:int|str, data_point:str, db_p
         return f"An error occurred: {e}"
     finally:
         conn.close()
+
+def get_stat_average(table_type: str, years: list[int], region: int|str, data_point: str, db_path: str='data/database/stat_igre_data.db'):
+    """
+    Calculates the average of a data point over a list of years by reusing get_stat_info.
+    
+    Args:
+        table_type (str): 'gospodinjstva' or 'osebe'.
+        years (list[int]): List of years to include (e.g., [2018, 2022]).
+        region (str/int): Region name or code.
+        data_point (str): Variable name.
+        db_path (str): Path to database.
+        
+    Returns:
+        float: The average value, or a message if no data was found.
+    """
+    values = []
+    
+    for year in years:
+        # Reuse the first function
+        result = get_stat_info(table_type, year, region, data_point, db_path)
+        
+        # Only add to list if the result is a number (ignores error strings)
+        if isinstance(result, (int, float)):
+            values.append(result)
+            
+    if not values:
+        return "No valid data found for the given years."
+    
+    # Calculate average
+    return sum(values) / len(values)
