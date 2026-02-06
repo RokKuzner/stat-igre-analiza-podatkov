@@ -1,5 +1,26 @@
 import sqlite3
 
+region_names_by_id = {
+    0: "SLOVENIJA",
+    1: "Pomurska",
+    2: "Podravska",
+    3: "Koroška",
+    4: "Savinjska",
+    5: "Zasavska",
+    6: "Posavska",
+    7: "Jugovzhodna Slovenija",
+    8: "Osrednjeslovenska",
+    9: "Gorenjska",
+    10: "Primorsko-notranjska",
+    11: "Goriška",
+    12: "Obalno-kraška"
+}
+
+def region_id_to_name(n:int) -> str:
+    if n not in region_id_to_name:
+        return ""
+    return region_names_by_id[n]
+
 def get_stat_info(table_type:str, year:int, region:int|str, data_point:str, db_path:str='data/database/stat_igre_data.db'):
     """
     Extracts a specific data value from the database.
