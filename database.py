@@ -63,7 +63,8 @@ def get_stat_for_all_years(table_type: str, region: int|str, data_point: str, db
         db_path (str): Path to database.
         
     Returns:
-        float: The average value, or a message if no data was found.
+        list[float]: Values over the avalible years
+        list[int]: The years
     """
     conn = sqlite3.connect(db_path)
     
@@ -102,4 +103,4 @@ def get_stat_for_all_years(table_type: str, region: int|str, data_point: str, db
         return "No valid data found for the given criteria."
     
     # 4. Calculate Average
-    return values
+    return values, available_years
