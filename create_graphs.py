@@ -19,8 +19,8 @@ def main(
         datapoint_map = []
 
         for i in range(1, 13):
-            to_compare_stats = [float(n) for n in database.get_stat_for_all_years("osebe", i, datapoint) if is_float(n)]
-            comparator_stats = [float(n) for n in database.get_stat_for_all_years("osebe", i, datapoint_comparator) if is_float(n)]
+            to_compare_stats = [float(n) for n in database.get_stat_for_all_years("osebe", i, datapoint)[0] if is_float(n)]
+            comparator_stats = [float(n) for n in database.get_stat_for_all_years("osebe", i, datapoint_comparator)[0] if is_float(n)]
 
             datapoint_map.append([
                 sum(comparator_stats)/len(comparator_stats), 
