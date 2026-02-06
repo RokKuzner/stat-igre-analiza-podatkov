@@ -11,7 +11,7 @@ def is_float(s:str) -> bool:
 
 def main(
     datapoint_comparator: str = "Neto_preb",
-    datapoints_to_compare: list[str] = ["Ocena_življ", "Ocena_odnos", "Zdravje_1"],
+    datapoints_to_compare: list[str] = ["Ocena_življ", "Ocena_odnos", "Zdravje_1", "Stpn_socizklj"],
     save_location = 'data/graphs'
 ) -> None:
     
