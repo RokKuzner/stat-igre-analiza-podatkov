@@ -2,6 +2,13 @@ import database
 import matplotlib.pyplot as plt
 import numpy as np
 
+def is_float(s:str) -> bool:
+    try:
+        float(s)
+        return True
+    except Exception as e:
+        return False
+
 def main(
     datapoint_comparator: str = "Neto_preb",
     datapoints_to_compare: list[str] = ["Ocena_življ", "Ocena_odnos", "Zdravje_1"],
@@ -12,8 +19,8 @@ def main(
         datapoint_map = []
 
         for i in range(1, 13):
-            to_compare_stats = [float(n) for n in database.get_stat_for_all_years("osebe", i, datapoint)]
-            comparator_stats = [float(n) for n in database.get_stat_for_all_years("osebe", i, datapoint_comparator)]
+            to_compare_stats = [float(n) for n in database.get_stat_for_all_years("osebe", i, datapoint) if is_float(n)]
+            comparator_stats = [float(n) for n in database.get_stat_for_all_years("osebe", i, datapoint_comparator) if is_float(n)]
 
             datapoint_map.append([
                 sum(comparator_stats)/len(comparator_stats), 
