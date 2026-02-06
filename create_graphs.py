@@ -9,12 +9,13 @@ def is_float(s:str) -> bool:
     except Exception as e:
         return False
     
-def plot(x_values, y_values, x_label, y_label, title):
+def plot(x_values, y_values, x_label, y_label, title, fig=None, ax=None):
     # Calculate the trend line
     z = np.polyfit(x_values, y_values, 1)
     p = np.poly1d(z)
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    if fig == None or ax == None:
+        fig, ax = plt.subplots(figsize=(10, 6))
 
     ax.plot(x_values, y_values, 'o', label='Data Points')
     ax.plot(x_values, y_values, '-', alpha=0.3)
