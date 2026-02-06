@@ -9,24 +9,27 @@ def is_float(s:str) -> bool:
     except Exception as e:
         return False
     
-def plot(x_values, y_values, x_label, y_label, title, fig=None, ax=None):
-    # Calculate the trend line
-    z = np.polyfit(x_values, y_values, 1)
-    p = np.poly1d(z)
-
+def plot(x_values, y_values, x_label, y_label, title, fig=None, ax=None, show_trend=True, show_legend=True):
     if fig == None or ax == None:
         fig, ax = plt.subplots(figsize=(10, 6))
 
     ax.plot(x_values, y_values, 'o', label='Data Points')
     ax.plot(x_values, y_values, '-', alpha=0.3)
-    ax.plot(x_values, p(x_values), "r--", 
+    # Calculate the trend line
+    if show_trend:
+        z = np.polyfit(x_values, y_values, 1)
+        p = np.poly1d(z)
+        ax.plot(x_values, p(x_values), "r--", 
             label=f"Trend Line (y={z[0]:.2f}x + {z[1]:.2f})", 
-            alpha=0.7)
+            alpha=0.7
+            )
+        
+    if show_legend:
+        ax.legend()
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
     ax.set_title(title)
-    ax.legend()
     ax.grid(True, linestyle=':', alpha=0.6)
 
     fig.tight_layout()
@@ -61,5 +64,19 @@ def primerjalni_grafi(
 
         plt.close(fig)
 
+def casovni_grafi(
+        comparator:str,
+        save_location = 'data/graphs'
+):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    for i in range(1, 13):
+        y_values, x_values = database.get_stat_for_all_years("osebe", i, comparator)
+        plot(x_values, y_values, "Čas", comparator, f"Korelacija: {comparator} proti čas za regijo vse regije", fig=fig, ax=ax, show_trend=False, show_legend=False)
+
+    fig.savefig(f"{save_location}/{comparator}_proti_cas_za_vse_regije.png")
+
+    plt.close(fig)
+
 if __name__ == "__main__":
     primerjalni_grafi()
+    casovni_grafi("Neto_preb")
