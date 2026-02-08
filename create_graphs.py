@@ -36,6 +36,20 @@ def plot(x_values, y_values, x_label, y_label, title, fig=None, ax=None, show_tr
 
     return fig, ax
 
+def bar(values, names, y_label=None, title=None, fig=None, ax=None):
+    if fig == None or ax == None:
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax.bar(names, values)
+
+    ax.set_ylabel(y_label)
+    ax.set_title(title)
+    ax.grid(True, linestyle=':', alpha=0.6)
+
+    fig.tight_layout()
+
+    return fig, ax
+
 def primerjalni_grafi(
     datapoint_comparator: str = "Neto_preb",
     datapoints_to_compare: list[str] = ["Ocena_življ", "Ocena_odnos", "Zdravje_1", "Stpn_socizklj"],
