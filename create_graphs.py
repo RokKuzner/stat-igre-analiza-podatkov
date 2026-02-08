@@ -36,13 +36,14 @@ def plot(x_values, y_values, x_label, y_label, title, fig=None, ax=None, show_tr
 
     return fig, ax
 
-def bar(values, names, y_label=None, title=None, fig=None, ax=None):
+def bar(values, names, y_label=None, x_label=None, title=None, fig=None, ax=None):
     if fig == None or ax == None:
         fig, ax = plt.subplots(figsize=(10, 6))
 
     ax.bar(names, values)
 
     ax.set_ylabel(y_label)
+    ax.set_xlabel(x_label)
     ax.set_title(title)
     ax.grid(True, linestyle=':', alpha=0.6)
 
