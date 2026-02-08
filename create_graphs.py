@@ -96,15 +96,6 @@ def casovni_grafi(
 
     plt.close(fig)
 
-def main() -> None:
-    primerjalni_grafi()
-    casovni_grafi()
-
-    names = [database.region_id_to_name(i) for i in range(1, 13)]
-    values = [database.get_stat_info("osebe", 2024, i, "Neto_preb") for i in range(1, 13)]
-    fig, _ = bar(values, names, "Neto dohodek na prebivalca", labelrotation=50)
-    fig.savefig("test2.png")
-
 def primerjava_zdravje(save_location = 'data/graphs'):
     datapoint_map = []
 
