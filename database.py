@@ -17,7 +17,7 @@ region_names_by_id = {
 }
 
 def region_id_to_name(n:int) -> str:
-    if n not in region_id_to_name:
+    if n not in region_names_by_id:
         return ""
     return region_names_by_id[n]
 
