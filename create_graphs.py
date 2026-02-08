@@ -83,6 +83,28 @@ def primerjalni_grafi(
 
         plt.close(fig)
 
+def casovni_grafi(
+        comparator:str = "Neto_preb",
+        save_location = 'data/graphs'
+):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    for i in range(1, 13):
+        y_values, x_values = database.get_stat_for_all_years("osebe", i, comparator)
+        plot(x_values, y_values, "Čas", comparator, f"Korelacija: {comparator} proti čas za regijo vse regije", fig=fig, ax=ax, show_trend=False, show_legend=False)
+
+    fig.savefig(f"{save_location}/{comparator}_proti_cas_za_vse_regije.png")
+
+    plt.close(fig)
+
+def main() -> None:
+    primerjalni_grafi()
+    casovni_grafi()
+
+    names = [database.region_id_to_name(i) for i in range(1, 13)]
+    values = [database.get_stat_info("osebe", 2024, i, "Neto_preb") for i in range(1, 13)]
+    fig, _ = bar(values, names, "Neto dohodek na prebivalca", labelrotation=50)
+    fig.savefig("test2.png")
+
 def primerjava_zdravje(save_location = 'data/graphs'):
     datapoint_map = []
 
@@ -110,27 +132,38 @@ def primerjava_zdravje(save_location = 'data/graphs'):
 
     plt.close(fig)
 
-def casovni_grafi(
-        comparator:str = "Neto_preb",
-        save_location = 'data/graphs'
-):
-    fig, ax = plt.subplots(figsize=(10, 6))
-    for i in range(1, 13):
-        y_values, x_values = database.get_stat_for_all_years("osebe", i, comparator)
-        plot(x_values, y_values, "Čas", comparator, f"Korelacija: {comparator} proti čas za regijo vse regije", fig=fig, ax=ax, show_trend=False, show_legend=False)
+def zdravje_po_regijah(save_location = 'data/graphs'):
+    datapoint_map = []
 
-    fig.savefig(f"{save_location}/{comparator}_proti_cas_za_vse_regije.png")
+    for i in range(1, 13):
+        zdravje_1 = database.get_stat_info("osebe", 2024, i, "zdravje_1")
+        zdravje_2 = database.get_stat_info("osebe", 2024, i, "zdravje_2")
+        zdravje_3 = database.get_stat_info("osebe", 2024, i, "zdravje_3")
+        zdravje_4 = database.get_stat_info("osebe", 2024, i, "zdravje_4")
+        zdravje_5 = database.get_stat_info("osebe", 2024, i, "zdravje_5")
+        zdravje_score = (5*zdravje_1 + 4*zdravje_2 + 3*zdravje_3 + 2*zdravje_4 + 1*zdravje_5) / (zdravje_1 + zdravje_2 + zdravje_3 + zdravje_4 + zdravje_5)
+
+        datapoint_map.append([
+                zdravje_score, 
+                database.region_id_to_name(i)
+            ])
+        
+    datapoint_map.sort(key=lambda x: x[0])
+    x_values = [point[1] for point in datapoint_map]
+    y_values = [point[0] for point in datapoint_map]
+
+    fig, _ = bar(y_values, x_values, title="Ocena zdravja po regijah", labelrotation=50)
+
+    ax = fig.gca()
+    y_min = min(y_values)
+    y_max = max(y_values)
+    padding = (y_max - y_min) * 0.1 
+    ax.set_ylim(y_min - padding, y_max + padding)
+
+    fig.savefig(f"{save_location}/zdravje_po_regijah.png")
 
     plt.close(fig)
 
-def main() -> None:
-    primerjalni_grafi()
-    casovni_grafi()
-
-    names = [database.region_id_to_name(i) for i in range(1, 13)]
-    values = [database.get_stat_info("osebe", 2024, i, "Neto_preb") for i in range(1, 13)]
-    fig, _ = bar(values, names, "Neto dohodek na prebivalca", labelrotation=50)
-    fig.savefig("test2.png")
-
 if __name__ == "__main__":
     primerjava_zdravje()
+    zdravje_po_regijah()
