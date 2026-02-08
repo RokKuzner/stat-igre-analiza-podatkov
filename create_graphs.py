@@ -36,7 +36,7 @@ def plot(x_values, y_values, x_label, y_label, title, fig=None, ax=None, show_tr
 
     return fig, ax
 
-def bar(values, names, y_label=None, x_label=None, title=None, fig=None, ax=None):
+def bar(values, names, y_label=None, x_label=None, title=None, fig=None, ax=None, labelrotation:int=None):
     if fig == None or ax == None:
         fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -47,7 +47,11 @@ def bar(values, names, y_label=None, x_label=None, title=None, fig=None, ax=None
     ax.set_title(title)
     ax.grid(True, linestyle=':', alpha=0.6)
 
-    fig.tight_layout()
+    if not labelrotation:fig.tight_layout()
+    else:
+        ax.tick_params(axis='x', labelrotation=labelrotation)
+        plt.setp(ax.get_xticklabels(), ha='right', rotation_mode='anchor')
+        fig.subplots_adjust(bottom=0.25)
 
     return fig, ax
 
@@ -98,7 +102,7 @@ def main() -> None:
 
     names = [database.region_id_to_name(i) for i in range(1, 13)]
     values = [database.get_stat_info("osebe", 2024, i, "Neto_preb") for i in range(1, 13)]
-    fig, _ = bar(values, names, "Neto dohodek na prebivalca", "Regija")
+    fig, _ = bar(values, names, "Neto dohodek na prebivalca", labelrotation=50)
     fig.savefig("test2.png")
 
 if __name__ == "__main__":
