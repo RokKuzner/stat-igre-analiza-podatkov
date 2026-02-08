@@ -80,7 +80,7 @@ def primerjalni_grafi(
         plt.close(fig)
 
 def casovni_grafi(
-        comparator:str,
+        comparator:str = "Neto_preb",
         save_location = 'data/graphs'
 ):
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -92,6 +92,9 @@ def casovni_grafi(
 
     plt.close(fig)
 
-if __name__ == "__main__":
+def main() -> None:
     primerjalni_grafi()
-    casovni_grafi("Neto_preb")
+    casovni_grafi()
+
+if __name__ == "__main__":
+    main()
