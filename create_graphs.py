@@ -83,6 +83,33 @@ def primerjalni_grafi(
 
         plt.close(fig)
 
+def primerjava_zdravje(save_location = 'data/graphs'):
+    datapoint_map = []
+
+    for i in range(1, 13):
+        zdravje_1 = database.get_stat_info("osebe", 2024, i, "zdravje_1")
+        zdravje_2 = database.get_stat_info("osebe", 2024, i, "zdravje_2")
+        zdravje_3 = database.get_stat_info("osebe", 2024, i, "zdravje_3")
+        zdravje_4 = database.get_stat_info("osebe", 2024, i, "zdravje_4")
+        zdravje_5 = database.get_stat_info("osebe", 2024, i, "zdravje_5")
+        zdravje_score = (5*zdravje_1 + 4*zdravje_2 + 3*zdravje_3 + 2*zdravje_4 + 1*zdravje_5) / (zdravje_1 + zdravje_2 + zdravje_3 + zdravje_4 + zdravje_5)
+        comparator_stat = database.get_stat_info("osebe", 2024, i, "Neto_preb")
+
+        datapoint_map.append([
+                zdravje_score, 
+                comparator_stat
+            ])
+        
+    datapoint_map.sort(key=lambda x: x[1])
+    x_values = [point[1] for point in datapoint_map]
+    y_values = [point[0] for point in datapoint_map]
+
+    fig, ax = plot(x_values, y_values, "neto dohodek na prebivalca v €", "ocena zdravja (1-5)", f"Korelacija: neto dohodek na prebivalca proti ocena zdravja")
+
+    fig.savefig(f"{save_location}/denar_proti_zdravje.png")
+
+    plt.close(fig)
+
 def casovni_grafi(
         comparator:str = "Neto_preb",
         save_location = 'data/graphs'
@@ -106,4 +133,4 @@ def main() -> None:
     fig.savefig("test2.png")
 
 if __name__ == "__main__":
-    main()
+    primerjava_zdravje()
