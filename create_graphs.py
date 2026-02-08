@@ -57,7 +57,7 @@ def bar(values, names, y_label=None, x_label=None, title=None, fig=None, ax=None
 
 def primerjalni_grafi(
     datapoint_comparator: str = "Neto_preb",
-    datapoints_to_compare: list[str] = ["Ocena_življ", "Ocena_odnos", "Zdravje_1", "Stpn_socizklj"],
+    datapoints_to_compare: list[str] = ["Ocena_življ", "Ocena_odnos", "Zdravje_1", "Stpn_socizklj", "Ocena_čas"],
     save_location = 'data/graphs'
 ) -> None:
     
