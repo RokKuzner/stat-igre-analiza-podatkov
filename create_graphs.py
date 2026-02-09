@@ -204,6 +204,17 @@ def primerjava_delovna_intenzivnost(save_location = 'data/graphs'):
 
     plt.close(fig)
 
+    x_values = [point[1] for point in datapoint_map]
+    y_values = [-point[0] for point in datapoint_map]
+
+    print(max(y_values), min(y_values), max(y_values)-min(y_values), (max(y_values)-min(y_values))/10)
+
+    fig, ax = plot(x_values, y_values, "neto dohodek na prebivalca v €", "- (stopnja nizke delovne intenzivnosti)", "Korelacija: neto dohodek na prebivalca proti - (stopnja nizke delovne intenzivnosti)")
+
+    fig.savefig(f"{save_location}/denar_proti_neg_del_intenzivnost.png")
+
+    plt.close(fig)
+
 if __name__ == "__main__":
     #primerjava_zdravje()
     #zdravje_po_regijah()
