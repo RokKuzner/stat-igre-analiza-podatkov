@@ -180,7 +180,32 @@ def primerjava_prosti_cas(save_location = 'data/graphs'):
 
     plt.close(fig)
 
+def primerjava_delovna_intenzivnost(save_location = 'data/graphs'):
+    datapoint_map = []
+
+    for i in range(1, 13):
+        delovna_intenzivnost_score = float(database.get_stat_info("osebe", 2018, i, "Stpn_del_int"))
+        comparator_stat = database.get_stat_info("osebe", 2018, i, "Neto_preb")
+
+        datapoint_map.append([
+                delovna_intenzivnost_score, 
+                comparator_stat
+            ])
+        
+    datapoint_map.sort(key=lambda x: x[1])
+    x_values = [point[1] for point in datapoint_map]
+    y_values = [point[0] for point in datapoint_map]
+
+    print(max(y_values), min(y_values), max(y_values)-min(y_values), (max(y_values)-min(y_values))/10)
+
+    fig, ax = plot(x_values, y_values, "neto dohodek na prebivalca v €", "stopnja nizke delovne intenzivnosti", "Korelacija: neto dohodek na prebivalca proti stopnja nizke delovne intenzivnosti")
+
+    fig.savefig(f"{save_location}/denar_proti_del_intenzivnost.png")
+
+    plt.close(fig)
+
 if __name__ == "__main__":
-    primerjava_zdravje()
-    zdravje_po_regijah()
-    primerjava_prosti_cas()
+    #primerjava_zdravje()
+    #zdravje_po_regijah()
+    #primerjava_prosti_cas()
+    primerjava_delovna_intenzivnost()
