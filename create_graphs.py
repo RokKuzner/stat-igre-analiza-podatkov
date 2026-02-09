@@ -13,14 +13,14 @@ def plot(x_values, y_values, x_label, y_label, title, fig=None, ax=None, show_tr
     if fig == None or ax == None:
         fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax.plot(x_values, y_values, 'o', label='Data Points')
+    ax.plot(x_values, y_values, 'o', label='Regije')
     ax.plot(x_values, y_values, '-', alpha=0.3)
     # Calculate the trend line
     if show_trend:
         z = np.polyfit(x_values, y_values, 1)
         p = np.poly1d(z)
         ax.plot(x_values, p(x_values), "r--", 
-            label=f"Trend Line (y={z[0]:.2f}x + {z[1]:.2f})", 
+            label="Trend", 
             alpha=0.7
             )
         
@@ -181,6 +181,6 @@ def primerjava_prosti_cas(save_location = 'data/graphs'):
     plt.close(fig)
 
 if __name__ == "__main__":
-    #primerjava_zdravje()
-    #zdravje_po_regijah()
+    primerjava_zdravje()
+    zdravje_po_regijah()
     primerjava_prosti_cas()
