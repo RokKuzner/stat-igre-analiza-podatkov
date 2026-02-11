@@ -240,6 +240,34 @@ def primerjava_izklucenost(year:int, save_location = 'data/graphs'):
 
     plt.close(fig)
 
+def neto_regije_bar_primerjava(regije:list, leti:list, save_location = 'data/graphs'):
+    datapoint_map = []
+
+    for i in regije:
+        value_1 = database.get_stat_info("osebe", leti[0], i, "Neto_preb")
+        value_2 = database.get_stat_info("osebe", leti[1], i, "Neto_preb")
+
+        datapoint_map.append([
+                value_2/value_1*100, 
+                database.region_id_to_name(i)
+            ])
+
+    x_values = [point[1] for point in datapoint_map]
+    y_values = [point[0] for point in datapoint_map]
+
+    fig, _ = bar(y_values, x_values, title=f"Neto dohodek na osebo v regiji v letu {leti[1]} glede na leto {leti[0]} v %", labelrotation=None)
+
+    ax = fig.gca()
+    y_min = min(y_values)
+    y_max = max(y_values)
+    padding = (y_max - y_min) * 0.1 
+    ax.set_ylim(y_min - padding, y_max + padding)
+
+    fig.savefig(f"{save_location}/neto_regija_primerjava_{leti[1]}_vs_{leti[0]}__{regije[0]}_vs_{regije[1]}.png")
+
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     #primerjava_zdravje()
     #zdravje_po_regijah()
@@ -248,4 +276,6 @@ if __name__ == "__main__":
     #primerjava_izklucenost(2018)
     #primerjava_izklucenost(2022)
     #primerjava_izklucenost(2024)
+    neto_regije_bar_primerjava([1, 12], [2018, 2022])
+    neto_regije_bar_primerjava([0, 12], [2018, 2022])
     pass
