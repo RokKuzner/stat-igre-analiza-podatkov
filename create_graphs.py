@@ -220,7 +220,7 @@ def primerjava_izklucenost(year:int, save_location = 'data/graphs'):
 
     fig, ax = plt.subplots(figsize=(12, 6))
     for i in range(1, 13):
-        izklucenost_score = float(database.get_stat_info("osebe", year, i, "Oseb_socizklj"))
+        izklucenost_score = float(database.get_stat_info("osebe", year, i, "Stpn_socizklj"))
         comparator_stat = database.get_stat_info("osebe", year, i, "Neto_preb")
 
         datapoint_map.append([
@@ -234,7 +234,7 @@ def primerjava_izklucenost(year:int, save_location = 'data/graphs'):
 
     print(max(y_values), min(y_values), max(y_values)-min(y_values), (max(y_values)-min(y_values))/10)
 
-    plot(x_values, y_values, "neto dohodek na prebivalca v €", "število oseb izpostavljenih tveganju socialne izključenosti", f"Korelacija: neto dohodek na prebivalca proti število oseb izpostavljenih tveganju socialne izključenosti za leto {year}", fig=fig, ax=ax, show_legend=False)
+    plot(x_values, y_values, "neto dohodek na prebivalca v €", "delež oseb izpostavljenih tveganju socialne izključenosti", f"Korelacija: neto dohodek na prebivalca proti delež oseb izpostavljenih tveganju socialne izključenosti za leto {year}", fig=fig, ax=ax, show_legend=False)
 
     fig.savefig(f"{save_location}/izkljucenost_{year}.png")
 
@@ -276,6 +276,6 @@ if __name__ == "__main__":
     #primerjava_izklucenost(2018)
     #primerjava_izklucenost(2022)
     #primerjava_izklucenost(2024)
-    neto_regije_bar_primerjava([1, 12], [2018, 2022])
-    neto_regije_bar_primerjava([0, 12], [2018, 2022])
+    #neto_regije_bar_primerjava([1, 12], [2018, 2022])
+    #neto_regije_bar_primerjava([0, 12], [2018, 2022])
     pass
