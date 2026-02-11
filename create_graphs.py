@@ -215,8 +215,37 @@ def primerjava_delovna_intenzivnost(save_location = 'data/graphs'):
 
     plt.close(fig)
 
+def primerjava_izklucenost(year:int, save_location = 'data/graphs'):
+    datapoint_map = []
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for i in range(1, 13):
+        izklucenost_score = float(database.get_stat_info("osebe", year, i, "Oseb_socizklj"))
+        comparator_stat = database.get_stat_info("osebe", year, i, "Neto_preb")
+
+        datapoint_map.append([
+                izklucenost_score, 
+                comparator_stat
+            ])
+        
+    datapoint_map.sort(key=lambda x: x[1])
+    x_values = [point[1] for point in datapoint_map]
+    y_values = [point[0] for point in datapoint_map]
+
+    print(max(y_values), min(y_values), max(y_values)-min(y_values), (max(y_values)-min(y_values))/10)
+
+    plot(x_values, y_values, "neto dohodek na prebivalca v €", "število oseb izpostavljenih tveganju socialne izključenosti", f"Korelacija: neto dohodek na prebivalca proti število oseb izpostavljenih tveganju socialne izključenosti za leto {year}", fig=fig, ax=ax, show_legend=False)
+
+    fig.savefig(f"{save_location}/izkljucenost_{year}.png")
+
+    plt.close(fig)
+
 if __name__ == "__main__":
     #primerjava_zdravje()
     #zdravje_po_regijah()
     #primerjava_prosti_cas()
-    primerjava_delovna_intenzivnost()
+    #primerjava_delovna_intenzivnost()
+    #primerjava_izklucenost(2018)
+    #primerjava_izklucenost(2022)
+    #primerjava_izklucenost(2024)
+    pass
